@@ -8,13 +8,14 @@ public class Main {
 
     public static void runAnalysis(String projectType) throws IOException, InterruptedException {
         switch (projectType.toLowerCase()) {
-            case "maven" -> {
+            case "maven":
                 System.out.println("Running analysis for Maven project...\n");
                 MavenAnalyzer mavenAnalyzer = new MavenAnalyzer();
                 mavenAnalyzer.analyzeMavenDependencies();
-            }
+                break;
 
-            default -> throw new UnsupportedProjectTypeException(projectType);
+            default:
+                throw new UnsupportedProjectTypeException(projectType);
         }
     }
 

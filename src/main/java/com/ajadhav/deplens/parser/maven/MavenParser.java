@@ -15,7 +15,6 @@ public class MavenParser {
     private static final String DEFAULT_POM_NAME = "pom.xml";
 
     public List<MavenDependency> parseMavenDependencies() throws IOException {
-        // Automatically detect pom.xml in current working directory
         File pomFile = new File(System.getProperty("user.dir"), DEFAULT_POM_NAME);
 
         if (!pomFile.exists() || !pomFile.isFile()) {
@@ -28,7 +27,6 @@ public class MavenParser {
         try (FileReader fileReader = new FileReader(pomFile)) {
             Model model = reader.read(fileReader);
 
-            // Extract dependency information
             for (Dependency dep : model.getDependencies()) {
                 dependenciesList.add(new MavenDependency(
                         dep.getGroupId(),
