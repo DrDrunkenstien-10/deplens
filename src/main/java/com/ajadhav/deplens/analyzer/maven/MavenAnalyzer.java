@@ -9,13 +9,16 @@ import com.ajadhav.deplens.client.maven.mavencentral.MavenCentralClient;
 import com.ajadhav.deplens.client.maven.osv.OsvClient;
 import com.ajadhav.deplens.dto.AnalysisInfoDTO;
 import com.ajadhav.deplens.dto.CveInfoDTO;
+import com.ajadhav.deplens.exception.LicenseViolationException;
 import com.ajadhav.deplens.parser.maven.MavenDependency;
 import com.ajadhav.deplens.parser.maven.MavenParser;
 import com.ajadhav.deplens.report.ReportGenerator;
 
 public class MavenAnalyzer {
 
-    public void analyzeMavenDependencies() throws IOException, InterruptedException {
+    public void analyzeMavenDependencies(List<String> disallowedLicenses)
+            throws IOException, InterruptedException, LicenseViolationException {
+
         MavenParser mavenParser = new MavenParser();
         List<MavenDependency> dependencies = mavenParser.parseMavenDependencies();
 
@@ -25,6 +28,7 @@ public class MavenAnalyzer {
         }
 
         List<AnalysisInfoDTO> analysisResults = new ArrayList<>();
+        List<AnalysisInfoDTO> violations = new ArrayList<>();
 
         System.out.println("\nAnalyzing Maven dependencies...\n");
 
@@ -48,6 +52,11 @@ public class MavenAnalyzer {
                         cveInfoList);
                 analysisResults.add(info);
 
+                if (license != null && disallowedLicenses != null &&
+                        disallowedLicenses.stream().anyMatch(l -> l.equalsIgnoreCase(license))) {
+                    violations.add(info);
+                }
+
                 printAnalysisInfo(info);
                 System.out.println("------------------------------------------------------------\n");
 
@@ -59,9 +68,13 @@ public class MavenAnalyzer {
             }
         }
 
-        System.out.println("Analysis completed for all dependencies.\n");
-
         ReportGenerator.generateReport(analysisResults);
+
+        if (!violations.isEmpty()) {
+            throw new LicenseViolationException(violations);
+        }
+
+        System.out.println("Analysis completed for all dependencies.\n");
     }
 
     private void printAnalysisInfo(AnalysisInfoDTO info) {
