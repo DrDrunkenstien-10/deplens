@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Resolve the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Path to the JAR inside the same directory after installation
+JAR_PATH="$SCRIPT_DIR/deplens.jar"
+
+if [[ ! -f "$JAR_PATH" ]]; then
+  echo "Error: deplens.jar not found next to the deplens script."
+  exit 1
+fi
+
+# Run the jar with all passed arguments
+java -jar "$JAR_PATH" "$@"
