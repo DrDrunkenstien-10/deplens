@@ -93,4 +93,5 @@ target/deplens-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 ## Contributing
 
-Contributions welcome — report issues, submit enhancements, add ecosystem support, or improve documentation. Please open an issue or submit a PR with clear descriptions. Follow the standard GitHub fork → branch → pull request workflow.
+Contributions welcome — report issues, submit enhancements, add ecosystem support, or improve documentation.  
+Please open an issue or submit a PR with clear descriptions. Follow the standard GitHub fork → branch → pull request workflow.
